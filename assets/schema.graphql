@@ -1,0 +1,28 @@
+type Chicken @aws_api_key @aws_cognito_user_pools {
+    id: ID!
+    name: String!
+    eggsCount: Int
+}
+
+input ChickenInput {
+    id: ID!
+    name: String!
+    eggsCount: Int
+}
+
+type Query {
+    getById(id: String!) : Chicken @aws_api_key @aws_cognito_user_pools
+    getAll: [Chicken] @aws_api_key @aws_cognito_user_pools
+}
+
+type Mutation {
+    create(chicken: ChickenInput!): Chicken @aws_cognito_user_pools
+    update(chicken: ChickenInput!): Chicken @aws_cognito_user_pools
+    remove(id: String!): String @aws_cognito_user_pools
+}
+
+type Subscription {
+    onCreate: Chicken @aws_subscribe(mutations:["create"])
+    onRemove: String @aws_subscribe(mutations:["remove"])
+    onUpdate: Chicken @awssubscribe(mutations:["update"])
+}
